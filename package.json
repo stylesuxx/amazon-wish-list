@@ -1,0 +1,25 @@
+{
+  "name": "amazon-wish-list",
+  "version": "0.0.0",
+  "description": "Find wish lists by email or ID.",
+  "main": "lib/index.js",
+  "scripts": {
+    "clean": "rm -rf lib",
+    "build": "npm run clean && ./node_modules/.bin/babel src --out-dir lib",
+    "test": "npm run build && node ./tests/index.js",
+    "lint": "./node_modules/.bin/eslint src",
+    "prepublish": "npm run build",
+    "preversion": "npm test"
+  },
+  "author": "Chris Landa <stylesuxx@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "babel": "^5.8.23",
+    "babel-eslint": "^4.1.4",
+    "eslint": "^1.9.0",
+    "tape": "^4.2.2"
+  },
+  "dependencies": {
+    "request-promise": "^1.0.2"
+  }
+}
