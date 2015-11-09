@@ -1,4 +1,3 @@
-//import Promise from 'bluebird';
 import rp from 'request-promise';
 import cheerio from 'cheerio';
 
@@ -29,11 +28,11 @@ class AmazonWishList {
           var title = $('h5', this).text().trim();
           var id = $('h5 a', this).attr('href').split('/')[2];
           var link = that.baseUrl + '/dp/' + id;
-          var priority = $('.g-item-comment-row span span.a-hidden', this).text().trim();
+          var priority = parseInt($('.g-item-comment-row span span.a-hidden', this).text().trim()) | 0;
           var comment = $('.g-item-comment-row .g-comment-quote.a-text-quote', this).text().trim();
-          var price = $('.price-section .a-color-price', this).text().trim().split(' ');
+          var price = $('.price-section .a-color-price', this).text().replace(',', '.').trim().split(' ');
           var currency = price[0];
-          price = price[1];
+          price = parseFloat(price[1].replace(/,/, '.'));
 
           items.push({
             id: id,
