@@ -1,7 +1,7 @@
 # Amazon Wish List
-A JavaScript scraper for amazon wish lists that returns promises.
+[![Build pass](https://travis-ci.org/stylesuxx/amazon-wish-list.svg?branch=master)](https://travis-ci.org/stylesuxx/amazon-wish-list?branch=master)  [![Dependencies](https://david-dm.org/stylesuxx/amazon-wish-list.svg)](https://david-dm.org/stylesuxx/amazon-wish-list)
 
-Calls to the classes methods return promises.
+> A JavaScript scraper for amazon wish lists that returns promises.
 
 ## Installation
     npm install amazon-wish-list --save
@@ -19,7 +19,8 @@ awl.getByID('NDDVVVWMJ6AN').then(function(list) {
 ## Available methods
 The *AmazonWishList* class provides the following methods:
 
-* getById(listID)
+* getById(listId)
+* getByCid(cid)
 
 ## Tested and working amazon TLD's
 * de
@@ -28,4 +29,5 @@ If you use a TLD not mentioned here, please post your findings to the issue sect
 
 ## Testing
 Since this is a scraper and relys on the amazon page not changing, an extensive test suite is provided and may be invoked by running:
+
     npm run test

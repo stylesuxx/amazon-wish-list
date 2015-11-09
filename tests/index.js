@@ -3,8 +3,8 @@ var AmazonWishList = require('../');
 
 var testData = {
   listID: 'NDDVVVWMJ6AN',
-  email: '',
-  cid: ''
+  email: 'stylesuxx@gmail.com',
+  cid: 'A3ETU88UAET9K3'
 }
 
 test('Get by wish list id', function (t) {
@@ -23,5 +23,25 @@ test('Get by wish list id', function (t) {
     t.equal(last.currency, 'EUR', 'Item currency available');
     t.equal(last.price, 13.99, 'Item price available');
     t.equal(last.link, 'https://amazon.de/dp/B00005MFO7', 'Item link available');
+  });
+});
+
+test('Get by CID', function (t) {
+  t.plan(2);
+  var lists = ['testing', 'Books', 'Boardgames'];
+  var available = [];
+
+  var awl = new AmazonWishList('de');
+  awl.getByCid(testData.cid).then( function(results) {
+    t.ok(results.length > 1, 'Contains multiple lists');
+
+    for(var i in results) {
+      var current = results[i];
+      if(lists.indexOf(current.title) > -1) {
+        available.push(true);
+      }
+    }
+
+    t.ok(available.length === 3, 'List titles match');
   });
 });

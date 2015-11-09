@@ -30,9 +30,16 @@ class AmazonWishList {
           var link = that.baseUrl + '/dp/' + id;
           var priority = parseInt($('.g-item-comment-row span span.a-hidden', this).text().trim()) | 0;
           var comment = $('.g-item-comment-row .g-comment-quote.a-text-quote', this).text().trim();
-          var price = $('.price-section .a-color-price', this).text().replace(',', '.').trim().split(' ');
-          var currency = price[0];
-          price = parseFloat(price[1].replace(/,/, '.'));
+          var price = $('.price-section .a-color-price', this).text();
+          var currency = 'N/A';
+          if(price) {
+            price = price.replace(',', '.').trim().split(' ');
+            currency = price[0];
+            price = parseFloat(price[1]);
+          }
+          else {
+            price = 'N/A';
+          }
 
           items.push({
             id: id,
@@ -48,6 +55,40 @@ class AmazonWishList {
         resolve(items);
       });
     }
+  }
+
+  getByCid(cid) {
+    var that = this;
+    var url = '/gp/registry/wishlist/?cid=' + cid;
+    var options = {
+      uri: this.baseUrl + url,
+      transform: function (body) {
+        return cheerio.load(body);
+      }
+    };
+
+    return rp(options).then(function($) {
+      var promises = [];
+      var lists = [];
+
+      var $lists = $('.wishlist-left-nav .g-left-nav-row a');
+      $lists.each(function() {
+        var url = $(this).attr('href');
+        var id = url.split('/')[4];
+        promises.push(that.getById(id));
+      });
+
+      return Promise.all(promises).then(function(responses) {
+        for(var i in responses) {
+          var current = responses[i];
+          lists.push(current);
+        }
+
+        return new Promise(function(resolve, reject) {
+          resolve(lists);
+        });
+      });
+    });
   }
 
   getById(id) {
