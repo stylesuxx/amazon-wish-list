@@ -57,7 +57,7 @@ class AmazonWishList {
     }
   }
 
-  getByCid(cid) {
+  getByCid(cid, filter = 'unpurchased') {
     var that = this;
     var url = '/gp/registry/wishlist/?cid=' + cid;
     var options = {
@@ -91,11 +91,14 @@ class AmazonWishList {
     });
   }
 
-  getById(id) {
+  getById(id, filter = 'unpurchased') {
     var that = this;
     var url = '/gp/registry/wishlist/' + id;
     var options = {
       uri: this.baseUrl + url,
+      qs: {
+        reveal: filter
+      },
       transform: function (body) {
         return cheerio.load(body);
       }
