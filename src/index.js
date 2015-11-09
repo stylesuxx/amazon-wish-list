@@ -35,7 +35,7 @@ class AmazonWishList {
           if(price) {
             price = price.replace(',', '.').trim().split(' ');
             currency = price[0];
-            price = parseFloat(price[1]);
+            price = parseFloat(parseFloat(price[1]).toFixed(2));
           }
           else {
             price = 'N/A';
@@ -57,7 +57,7 @@ class AmazonWishList {
     }
   }
 
-  getByCid(cid, filter = 'unpurchased') {
+  getByCid(cid, filter = 'unpurchased', sort = 'date') {
     var that = this;
     var url = '/gp/registry/wishlist/?cid=' + cid;
     var options = {
@@ -75,7 +75,7 @@ class AmazonWishList {
       $lists.each(function() {
         var url = $(this).attr('href');
         var id = url.split('/')[4];
-        promises.push(that.getById(id, filter));
+        promises.push(that.getById(id, filter, sort));
       });
 
       return Promise.all(promises).then(function(responses) {
@@ -91,13 +91,14 @@ class AmazonWishList {
     });
   }
 
-  getById(id, filter = 'unpurchased') {
+  getById(id, filter = 'unpurchased', sort = 'date') {
     var that = this;
     var url = '/gp/registry/wishlist/' + id;
     var options = {
       uri: this.baseUrl + url,
       qs: {
-        reveal: filter
+        reveal: filter,
+        sort: (sort != 'priority') ? 'universal-' + sort : sort
       },
       transform: function (body) {
         return cheerio.load(body);
