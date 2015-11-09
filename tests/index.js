@@ -16,6 +16,6 @@ test('Get by wish list id', function (t) {
     t.ok(result.items.length >= 26, 'Pagination is working');
 
     var first = result.items[0];
-    t.equal(first.title, 'Die Simpsons - Die komplette Season 1 (Collector\'s Edition, 3 DVDs)', 'Item title matches');
+    t.equal(first.title, 'Die Simpsons - Die komplette Season 1 (Collector\'s Edition, 3 DVDs)', 'Item title available');
   });
 });
