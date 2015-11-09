@@ -83,7 +83,9 @@ class AmazonWishList {
           list.items = list.items.concat(current);
         }
 
-        return list;
+        return new Promise(function(resolve, reject) {
+          resolve(list);
+        });
       });
     });
   }
