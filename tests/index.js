@@ -35,7 +35,7 @@ test('Get purchased by wish list id', function (t) {
   var awl = new AmazonWishList('de');
   awl.getById(testData.listID, 'purchased').then( function(result) {
     t.equal(result.title, 'testing', 'List title available');
-    t.ok(result.items.length == 1, 'Amount matches');
+    t.equal(result.items.length, 1, 'Amount matches');
     allItems += result.items.length;
 
     var last = result.items[result.items.length - 1];
@@ -55,7 +55,7 @@ test('Get all by wish list id', function (t) {
   var awl = new AmazonWishList('de');
   awl.getById(testData.listID, 'all').then( function(result) {
     t.equal(result.title, 'testing', 'List title available');
-    t.ok(result.items.length == allItems, 'Amount matches');
+    t.equal(result.items.length, allItems, 'Amount matches');
 
     var last = result.items[result.items.length - 1];
     t.equal(last.title, 'Die Simpsons - Die komplette Season 1 (Collector\'s Edition, 3 DVDs)', 'Item title available');
@@ -84,6 +84,42 @@ test('Get by CID', function (t) {
       }
     }
 
-    t.ok(available.length === 3, 'List titles match');
+    t.equals(available.length, lists.length, 'List titles match');
+  });
+});
+
+test('Get by cid with "all" filter', function (t) {
+  t.plan(11);
+  var lists = ['testing', 'Books', 'Boardgames'];
+  var available = [];
+  var testingList = {};
+
+  var awl = new AmazonWishList('de');
+  awl.getByCid(testData.cid, 'all').then( function(results) {
+    t.ok(results.length > 1, 'Contains multiple lists');
+
+    for(var i in results) {
+      var current = results[i];
+      if(lists.indexOf(current.title) > -1) {
+        available.push(true);
+        if(current.title === 'testing') {
+          testingList = current;
+        }
+      }
+    }
+
+    t.equal(available.length, 3, 'List titles match');
+
+    t.equal(testingList.title, 'testing', 'List title available');
+    t.equal(testingList.items.length, allItems, 'Amount matches');
+
+    var last = testingList.items[testingList.items.length - 1];
+    t.equal(last.title, 'Die Simpsons - Die komplette Season 1 (Collector\'s Edition, 3 DVDs)', 'Item title available');
+    t.equal(last.id, 'B00005MFO7', 'Item ID available');
+    t.equal(last.priority, 2, 'Item priority available');
+    t.equal(last.comment, 'Just a test comment.', 'Item comment available');
+    t.equal(last.currency, 'EUR', 'Item currency available');
+    t.equal(last.price, 13.99, 'Item price available');
+    t.equal(last.link, 'https://amazon.de/dp/B00005MFO7', 'Item link available');
   });
 });
