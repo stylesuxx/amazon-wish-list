@@ -7,13 +7,16 @@ var testData = {
   cid: 'A3ETU88UAET9K3'
 }
 
-test('Get by wish list id', function (t) {
+var unpurchased = 0;
+
+test('Get unpurchased by wish list id', function (t) {
   t.plan(9);
 
   var awl = new AmazonWishList('de');
   awl.getById(testData.listID).then( function(result) {
     t.equal(result.title, 'testing', 'List title available');
     t.ok(result.items.length >= 26, 'Pagination is working');
+    unpurchase = result.items.length;
 
     var last = result.items[result.items.length - 1];
     t.equal(last.title, 'Die Simpsons - Die komplette Season 1 (Collector\'s Edition, 3 DVDs)', 'Item title available');
@@ -23,6 +26,25 @@ test('Get by wish list id', function (t) {
     t.equal(last.currency, 'EUR', 'Item currency available');
     t.equal(last.price, 13.99, 'Item price available');
     t.equal(last.link, 'https://amazon.de/dp/B00005MFO7', 'Item link available');
+  });
+});
+
+test('Get purchased by wish list id', function (t) {
+  t.plan(9);
+
+  var awl = new AmazonWishList('de');
+  awl.getById(testData.listID, 'purchased').then( function(result) {
+    t.equal(result.title, 'testing', 'List title available');
+    t.ok(result.items.length == 1, 'Amount matches');
+
+    var last = result.items[result.items.length - 1];
+    t.equal(last.title, 'United Labels 0804201 - Simpsons Sprechender Flaschenöffner', 'Item title available');
+    t.equal(last.id, 'B0015GCBJG', 'Item ID available');
+    t.equal(last.priority, 0, 'Item priority available');
+    t.equal(last.comment, '', 'Item comment is empty');
+    t.equal(last.currency, 'EUR', 'Item currency available');
+    t.equal(last.price, 8.99, 'Item price available');
+    t.equal(last.link, 'https://amazon.de/dp/B0015GCBJG', 'Item link available');
   });
 });
 
