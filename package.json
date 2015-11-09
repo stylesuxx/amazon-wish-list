@@ -1,7 +1,7 @@
 {
   "name": "amazon-wish-list",
   "version": "0.0.0",
-  "description": "Find wish lists by email or ID.",
+  "description": "Find amazon wish lists by their ID, customer ID or E-Mail.",
   "main": "lib/index.js",
   "scripts": {
     "clean": "rm -rf lib",
@@ -16,11 +16,11 @@
   "devDependencies": {
     "babel": "^5.8.23",
     "babel-eslint": "^4.1.4",
-    "cheerio": "^0.19.0",
     "eslint": "^1.9.0",
     "tape": "^4.2.2"
   },
   "dependencies": {
-    "request-promise": "^1.0.2"
+    "request-promise": "^1.0.2",
+    "cheerio": "^0.19.0"
   }
 }
