@@ -75,7 +75,7 @@ class AmazonWishList {
       $lists.each(function() {
         var url = $(this).attr('href');
         var id = url.split('/')[4];
-        promises.push(that.getById(id));
+        promises.push(that.getById(id, filter));
       });
 
       return Promise.all(promises).then(function(responses) {
