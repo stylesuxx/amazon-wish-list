@@ -86,6 +86,24 @@ test('Get all by list id and sort by price', function (t) {
   });
 });
 
+test('Get all by list id and sort by price-desc', function (t) {
+  t.plan(9);
+
+  var awl = new AmazonWishList('de');
+  awl.getById(testData.listID, 'all', 'price-desc').then( function(result) {
+    t.equal(result.title, 'testing', 'List title available');
+    t.equal(result.items.length, allItems, 'Amount matches');
+
+    var item = result.items[0];
+    t.equal(item.title, 'Simpsons Monsterbox (Season 1-9)', 'Item title available');
+    t.equal(item.id, 'B000UDR1W2', 'Item ID available');
+    t.equal(item.priority, 0, 'Item priority available');
+    t.equal(item.comment, '', 'Item comment available');
+    t.equal(item.currency, 'EUR', 'Item currency available');
+    t.equal(item.price, 129.00, 'Item price available');
+    t.equal(item.link, 'https://amazon.de/dp/B000UDR1W2', 'Item link available');
+  });
+});
 
 test('Get by CID', function (t) {
   t.plan(2);
