@@ -19,8 +19,13 @@ awl.getByID('NDDVVVWMJ6AN').then(function(list) {
 ## Available methods
 The *AmazonWishList* class provides the following methods:
 
-* getById(listId)
-* getByCid(cid)
+* getById(listId, filter = 'unpurchased')
+* getByCid(cid, filter = 'unpurchased')
+
+Valid *filter* values are:
+  * unpurchased
+  * purchased
+  * all
 
 ## Tested and working amazon TLD's
 * de
