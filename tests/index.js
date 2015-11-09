@@ -105,6 +105,25 @@ test('Get all by list id and sort by price-desc', function (t) {
   });
 });
 
+test('Get all by list id and sort by title', function (t) {
+  t.plan(9);
+
+  var awl = new AmazonWishList('de');
+  awl.getById(testData.listID, 'all', 'title').then( function(result) {
+    t.equal(result.title, 'testing', 'List title available');
+    t.equal(result.items.length, allItems, 'Amount matches');
+
+    var item = result.items[0];
+    t.equal(item.title, 'Die Simpsons  - Die komplette Season 9 (Collector\'s Edition, 4 DVDs)', 'Item title available');
+    t.equal(item.id, 'B000MM0HT0', 'Item ID available');
+    t.equal(item.priority, 0, 'Item priority available');
+    t.equal(item.comment, '', 'Item comment available');
+    t.equal(item.currency, 'EUR', 'Item currency available');
+    t.equal(item.price, 13.99, 'Item price available');
+    t.equal(item.link, 'https://amazon.de/dp/B000MM0HT0', 'Item link available');
+  });
+});
+
 test('Get by CID', function (t) {
   t.plan(2);
   var lists = ['testing', 'Books', 'Boardgames'];
