@@ -11,7 +11,7 @@ test('Get by wish list id', function (t) {
   t.plan(9);
 
   var awl = new AmazonWishList('de');
-  awl.getListById(testData.listID).then( function(result) {
+  awl.getById(testData.listID).then( function(result) {
     t.equal(result.title, 'testing', 'List title available');
     t.ok(result.items.length >= 26, 'Pagination is working');
 

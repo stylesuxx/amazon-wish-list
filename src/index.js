@@ -50,7 +50,7 @@ class AmazonWishList {
     }
   }
 
-  getListById(id) {
+  getById(id) {
     var that = this;
     var url = '/gp/registry/wishlist/' + id;
     var options = {
