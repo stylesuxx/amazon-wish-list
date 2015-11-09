@@ -3,8 +3,6 @@
 
 > A JavaScript scraper for amazon wish lists that returns promises.
 
-Calls to the classes methods return promises.
-
 ## Installation
     npm install amazon-wish-list --save
 
