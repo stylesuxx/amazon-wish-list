@@ -7,12 +7,12 @@ var testData = {
   email: ''
 }
 
-test('Get wish list by "wish list id"', function (t) {
-  t.plan(1);
+test('Get by wish list id', function (t) {
+  t.plan(2);
 
   var awl = new AmazonWishList('de');
   awl.getListById(testData.listID).then( function(result) {
-    console.log(result);
     t.equal(result.title, 'testing', 'List title matches');
+    t.ok(result.items.length >= 26, 'Pagination is working');
   });
 });
