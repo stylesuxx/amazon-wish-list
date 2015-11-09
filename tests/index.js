@@ -3,7 +3,6 @@ var AmazonWishList = require('../');
 
 var testData = {
   listID: 'NDDVVVWMJ6AN',
-  email: 'stylesuxx@gmail.com',
   cid: 'A3ETU88UAET9K3'
 }
 
@@ -67,6 +66,26 @@ test('Get all by wish list id', function (t) {
     t.equal(last.link, 'https://amazon.de/dp/B00005MFO7', 'Item link available');
   });
 });
+
+test('Get all by list id and sort by price', function (t) {
+  t.plan(9);
+
+  var awl = new AmazonWishList('de');
+  awl.getById(testData.listID, 'all', 'price').then( function(result) {
+    t.equal(result.title, 'testing', 'List title available');
+    t.equal(result.items.length, allItems, 'Amount matches');
+
+    var item = result.items[0];
+    t.equal(item.title, 'Die Simpsons - Schrille Nacht mit den Simpsons', 'Item title available');
+    t.equal(item.id, 'B0002W3H3S', 'Item ID available');
+    t.equal(item.priority, 0, 'Item priority available');
+    t.equal(item.comment, '', 'Item comment available');
+    t.equal(item.currency, 'EUR', 'Item currency available');
+    t.equal(item.price, 6.97, 'Item price available');
+    t.equal(item.link, 'https://amazon.de/dp/B0002W3H3S', 'Item link available');
+  });
+});
+
 
 test('Get by CID', function (t) {
   t.plan(2);
