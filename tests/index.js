@@ -198,3 +198,39 @@ test('Get by cid with "all" filter', function (t) {
     t.equal(last.link, 'https://amazon.de/dp/B00005MFO7', 'Item link available');
   });
 });
+
+test('Get by cid with "all" filter and sort by priority', function (t) {
+  t.plan(11);
+  var lists = ['testing', 'Books', 'Boardgames'];
+  var available = [];
+  var testingList = {};
+
+  var awl = new AmazonWishList('de');
+  awl.getByCid(testData.cid, 'all', 'priority').then( function(results) {
+    t.ok(results.length > 1, 'Contains multiple lists');
+
+    for(var i in results) {
+      var current = results[i];
+      if(lists.indexOf(current.title) > -1) {
+        available.push(true);
+        if(current.title === 'testing') {
+          testingList = current;
+        }
+      }
+    }
+
+    t.equal(available.length, 3, 'List titles match');
+
+    t.equal(testingList.title, 'testing', 'List title available');
+    t.equal(testingList.items.length, allItems, 'Amount matches');
+
+    var item = testingList.items[0];
+    t.equal(item.title, 'Die Simpsons - Die komplette Season 1 (Collector\'s Edition, 3 DVDs)', 'Item title available');
+    t.equal(item.id, 'B00005MFO7', 'Item ID available');
+    t.equal(item.priority, 2, 'Item priority available');
+    t.equal(item.comment, 'Just a test comment.', 'Item comment available');
+    t.equal(item.currency, 'EUR', 'Item currency available');
+    t.equal(item.price, 13.99, 'Item price available');
+    t.equal(item.link, 'https://amazon.de/dp/B00005MFO7', 'Item link available');
+  });
+});
