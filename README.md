@@ -19,7 +19,7 @@ awl.getByID('NDDVVVWMJ6AN').then(function(list) {
 ## Available methods
 The *AmazonWishList* class provides the following methods:
 
-* getById(listID)
+* getById(listId)
 * getByCid(cid)
 
 ## Tested and working amazon TLD's
