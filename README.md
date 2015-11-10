@@ -11,7 +11,7 @@
 var AmazonWishList = require('amazon-wish-list');
 var awl = new AmazonWishList();
 
-awl.getByID('NDDVVVWMJ6AN').then(function(list) {
+awl.getById('NDDVVVWMJ6AN').then(function(list) {
   console.log(list);
 });
 ```
