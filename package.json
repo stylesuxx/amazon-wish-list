@@ -1,7 +1,7 @@
 {
   "name": "amazon-wish-list",
   "version": "0.0.0",
-  "description": "Find amazon wish lists by their ID, customer ID or E-Mail.",
+  "description": "Get Amazon wish lists by their ID, or by customer ID.",
   "main": "lib/index.js",
   "scripts": {
     "clean": "rm -rf lib",
