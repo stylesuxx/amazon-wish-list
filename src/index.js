@@ -80,12 +80,14 @@ class AmazonWishList {
       $lists.each((index, item) => {
         var url = $(item).attr('href');
         var id = url.split('/')[4];
+
         promises.push(this.getById(id, filter, sort));
       });
 
       return Promise.all(promises).then(function(responses) {
         for(var i in responses) {
           var current = responses[i];
+
           lists.push(current);
         }
 
@@ -123,12 +125,14 @@ class AmazonWishList {
       var $pages = $('.a-pagination li:not(.a-selected, .a-last) a');
       $pages.each((index, element) => {
         var url = $(element).attr('href');
+
         promises.push(this.getPage(url));
       });
 
       return Promise.all(promises).then(function(responses) {
         for(var i in responses) {
           var current = responses[i];
+          
           list.items = list.items.concat(current);
         }
 
