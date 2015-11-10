@@ -8,7 +8,7 @@ var testData = {
 
 var allItems = 0;
 
-test('Get unpurchased by wish list id', function (t) {
+test('List ID: unpurchased', function (t) {
   t.plan(9);
 
   var awl = new AmazonWishList('de');
@@ -28,7 +28,7 @@ test('Get unpurchased by wish list id', function (t) {
   });
 });
 
-test('Get purchased by wish list id', function (t) {
+test('List ID: unpurchased', function (t) {
   t.plan(9);
 
   var awl = new AmazonWishList('de');
@@ -48,7 +48,7 @@ test('Get purchased by wish list id', function (t) {
   });
 });
 
-test('Get all by wish list id', function (t) {
+test('List ID: all', function (t) {
   t.plan(9);
 
   var awl = new AmazonWishList('de');
@@ -67,7 +67,7 @@ test('Get all by wish list id', function (t) {
   });
 });
 
-test('Get all by list id and sort by price', function (t) {
+test('List ID: all, sort: price', function (t) {
   t.plan(9);
 
   var awl = new AmazonWishList('de');
@@ -86,7 +86,7 @@ test('Get all by list id and sort by price', function (t) {
   });
 });
 
-test('Get all by list id and sort by price-desc', function (t) {
+test('List ID: all, sort: price-desc', function (t) {
   t.plan(9);
 
   var awl = new AmazonWishList('de');
@@ -105,7 +105,7 @@ test('Get all by list id and sort by price-desc', function (t) {
   });
 });
 
-test('Get all by list id and sort by title', function (t) {
+test('List ID: all, sort: title', function (t) {
   t.plan(9);
 
   var awl = new AmazonWishList('de');
@@ -124,7 +124,7 @@ test('Get all by list id and sort by title', function (t) {
   });
 });
 
-test('Get all by list id and sort by priority', function (t) {
+test('List ID: all, sort: priority', function (t) {
   t.plan(9);
 
   var awl = new AmazonWishList('de');
@@ -143,7 +143,17 @@ test('Get all by list id and sort by priority', function (t) {
   });
 });
 
-test('Get by CID', function (t) {
+test('List ID: invalid ID', function (t) {
+  t.plan(1);
+
+  var awl = new AmazonWishList('de');
+  awl.getById('id-fail').then( function(result) {
+  }, function(err) {
+    t.equal(err.statusCode, 404, 'Rejected with 404');
+  });
+});
+
+test('Customer ID: unpurchased', function (t) {
   t.plan(2);
   var lists = ['testing', 'Books', 'Boardgames'];
   var available = [];
@@ -163,7 +173,7 @@ test('Get by CID', function (t) {
   });
 });
 
-test('Get by cid with "all" filter', function (t) {
+test('Customer ID: all', function (t) {
   t.plan(11);
   var lists = ['testing', 'Books', 'Boardgames'];
   var available = [];
@@ -199,7 +209,7 @@ test('Get by cid with "all" filter', function (t) {
   });
 });
 
-test('Get by cid with "all" filter and sort by priority', function (t) {
+test('Customer ID: unpurchased, sort: priority', function (t) {
   t.plan(11);
   var lists = ['testing', 'Books', 'Boardgames'];
   var available = [];
@@ -232,5 +242,15 @@ test('Get by cid with "all" filter and sort by priority', function (t) {
     t.equal(item.currency, 'EUR', 'Item currency available');
     t.equal(item.price, 13.99, 'Item price available');
     t.equal(item.link, 'https://amazon.de/dp/B00005MFO7', 'Item link available');
+  });
+});
+
+test('Customer ID: invalid ID', function (t) {
+  t.plan(1);
+
+  var awl = new AmazonWishList('de');
+  awl.getByCid('id-fail').then( function(result) {
+  }, function(err) {
+    t.equal(err.statusCode, 404, 'Rejected with 404');
   });
 });
