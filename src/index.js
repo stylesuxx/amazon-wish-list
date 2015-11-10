@@ -57,15 +57,22 @@ class AmazonWishList {
   }
 
   getByCid(cid, filter = 'unpurchased', sort = 'date') {
-    var url = '/gp/registry/wishlist/?cid=' + cid;
+    var url = '/gp/profile/' + cid;
     var options = {
-      uri: this.baseUrl + url,
-      transform: function (body) {
-        return cheerio.load(body);
-      }
+      uri: this.baseUrl + url
     };
 
-    return rp(options).then(($) => {
+    return rp(options).then(() => {
+        var url = '/gp/registry/wishlist/?cid=' + cid;
+        var options = {
+          uri: this.baseUrl + url,
+          transform: function (body) {
+            return cheerio.load(body);
+          }
+        };
+
+        return rp(options);
+    }).then(($) => {
       var promises = [];
       var lists = [];
 
