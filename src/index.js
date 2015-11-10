@@ -63,15 +63,15 @@ class AmazonWishList {
     };
 
     return rp(options).then(() => {
-        var url = '/gp/registry/wishlist/?cid=' + cid;
-        var options = {
-          uri: this.baseUrl + url,
-          transform: function (body) {
-            return cheerio.load(body);
-          }
-        };
+      var url = '/gp/registry/wishlist/?cid=' + cid;
+      var options = {
+        uri: this.baseUrl + url,
+        transform: function (body) {
+          return cheerio.load(body);
+        }
+      };
 
-        return rp(options);
+      return rp(options);
     }).then(($) => {
       var promises = [];
       var lists = [];
@@ -132,7 +132,7 @@ class AmazonWishList {
       return Promise.all(promises).then(function(responses) {
         for(var i in responses) {
           var current = responses[i];
-          
+
           list.items = list.items.concat(current);
         }
 
