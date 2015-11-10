@@ -244,3 +244,13 @@ test('Get list by invalid id', function (t) {
     t.equal(err.statusCode, 404, 'Rejected with 404');
   });
 });
+
+test('Get multiple lists by invalid cid', function (t) {
+  t.plan(1);
+
+  var awl = new AmazonWishList('de');
+  awl.getByCid('id-fail').then( function(result) {
+  }, function(err) {
+    t.equal(err.statusCode, 404, 'Rejected with 404');
+  });
+});
