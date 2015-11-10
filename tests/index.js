@@ -234,3 +234,13 @@ test('Get by cid with "all" filter and sort by priority', function (t) {
     t.equal(item.link, 'https://amazon.de/dp/B00005MFO7', 'Item link available');
   });
 });
+
+test('Get list by invalid id', function (t) {
+  t.plan(1);
+
+  var awl = new AmazonWishList('de');
+  awl.getById('id-fail').then( function(result) {
+  }, function(err) {
+    t.equal(err.statusCode, 404, 'Rejected with 404');
+  });
+});
