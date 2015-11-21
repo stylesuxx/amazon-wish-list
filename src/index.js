@@ -20,8 +20,8 @@ class AmazonWishList {
 
     this.getItems = function($) {
       return new Promise((resolve, reject) => {
+        var $items = $('#item-page-wrapper .g-items-section>div.a-fixed-left-grid');
         var items = [];
-        var $items = $('.g-items-section>div');
 
         $items.each((index, element) => {
           var title = $('h5', element).text().trim();
@@ -114,7 +114,7 @@ class AmazonWishList {
     return rp(options).then(($) => {
       var promises = [];
       var list = {
-        title: $('.profile-layout-aid-top .clip-text span').text().trim(),
+        title: $('#wl-list-info h1').text().trim(),
         items: []
       };
 
