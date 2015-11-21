@@ -29,15 +29,20 @@ class AmazonWishList {
           var link = this.baseUrl + '/dp/' + id;
           var priority = parseInt($('.g-item-comment-row span span.a-hidden', element).text().trim()) | 0;
           var comment = $('.g-item-comment-row .g-comment-quote.a-text-quote', element).text().trim();
-          var price = $('.price-section .a-color-price', element).text();
+          var priceText = $('.price-section .a-color-price', element).text();
           var currency = 'N/A';
-          if(price) {
-            price = price.replace(',', '.').trim().split(' ');
-            currency = price[0];
-            price = parseFloat(parseFloat(price[1]).toFixed(2));
-          }
-          else {
-            price = 'N/A';
+          var price = 'N/A';
+          if(priceText) {
+            priceText = priceText.replace(',', '.').trim();
+            var re = /(\D*)(.*)/;
+            var result = re.exec(priceText);
+
+            if(result.length < 3) {
+              reject('Could not parse item price.')
+            }
+
+            currency = result[1].trim();
+            price = parseFloat(parseFloat(result[2]).toFixed(2));
           }
 
           items.push({
