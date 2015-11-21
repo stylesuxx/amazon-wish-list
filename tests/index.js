@@ -1,11 +1,6 @@
 var test = require('tape');
 var AmazonWishList = require('../');
 
-var allItems = 0;
-var tld = 'de';
-
-var testData = require('./tld/' + tld + '.js');
-
 function compareItem(t, item, reference) {
   t.equal(item.title, reference.title, 'Item title available');
   t.equal(item.id, reference.id, 'Item ID available');
@@ -16,195 +11,214 @@ function compareItem(t, item, reference) {
   t.equal(item.link, reference.link, 'Item link available');
 }
 
-test(tld + ': List ID: unpurchased', function(t) {
-  t.plan(9);
+function tests(tld) {
+  return new Promise((resolve, reject) => {
+    var testData = require('./tld/' + tld + '.js');
+    var allItems = 0;
 
-  var awl = new AmazonWishList(tld);
-  awl.getById(testData.listID).then(function(result) {
-    t.equal(result.title, testData.title, 'List title available');
-    t.ok(result.items.length >= testData.itemCount, 'Pagination is working');
-    allItems += result.items.length;
+    test(tld + ': List ID: unpurchased', function(t) {
+      t.plan(9);
 
-    var last = result.items[result.items.length - 1];
-    compareItem(t, last, testData.unpurchased);
-  });
-});
+      var awl = new AmazonWishList(tld);
+      awl.getById(testData.listID).then(function(result) {
+        t.equal(result.title, testData.title, 'List title available');
+        t.ok(result.items.length >= testData.itemCount, 'Pagination is working');
+        allItems += result.items.length;
 
-test(tld + ': List ID: purchased', function (t) {
-  t.plan(9);
+        var last = result.items[result.items.length - 1];
+        compareItem(t, last, testData.unpurchased);
+      });
+    });
 
-  var awl = new AmazonWishList(tld);
-  awl.getById(testData.listID, 'purchased').then( function(result) {
-    t.equal(result.title, testData.title, 'List title available');
-    t.equal(result.items.length, 1, 'Amount matches');
-    allItems += result.items.length;
+    test(tld + ': List ID: purchased', function (t) {
+      t.plan(9);
 
-    var last = result.items[result.items.length - 1];
-    compareItem(t, last, testData.purchased);
-  });
-});
+      var awl = new AmazonWishList(tld);
+      awl.getById(testData.listID, 'purchased').then( function(result) {
+        t.equal(result.title, testData.title, 'List title available');
+        t.equal(result.items.length, 1, 'Amount matches');
+        allItems += result.items.length;
 
-test(tld + ': List ID: all', function (t) {
-  t.plan(9);
+        var last = result.items[result.items.length - 1];
+        compareItem(t, last, testData.purchased);
+      });
+    });
 
-  var awl = new AmazonWishList(tld);
-  awl.getById(testData.listID, 'all').then( function(result) {
-    t.equal(result.title, testData.title, 'List title available');
-    t.equal(result.items.length, allItems, 'Amount matches');
+    test(tld + ': List ID: all', function (t) {
+      t.plan(9);
 
-    var last = result.items[result.items.length - 1];
-    compareItem(t, last, testData.unpurchased);
-  });
-});
+      var awl = new AmazonWishList(tld);
+      awl.getById(testData.listID, 'all').then( function(result) {
+        t.equal(result.title, testData.title, 'List title available');
+        t.equal(result.items.length, allItems, 'Amount matches');
 
-test(tld + ': List ID: all, sort: price', function (t) {
-  t.plan(9);
+        var last = result.items[result.items.length - 1];
+        compareItem(t, last, testData.unpurchased);
+      });
+    });
 
-  var awl = new AmazonWishList(tld);
-  awl.getById(testData.listID, 'all', 'price').then( function(result) {
-    t.equal(result.title, testData.title, 'List title available');
-    t.equal(result.items.length, allItems, 'Amount matches');
+    test(tld + ': List ID: all, sort: price', function (t) {
+      t.plan(9);
 
-    var item = result.items[0];
-    compareItem(t, item, testData.byPrice);
-  });
-});
+      var awl = new AmazonWishList(tld);
+      awl.getById(testData.listID, 'all', 'price').then( function(result) {
+        t.equal(result.title, testData.title, 'List title available');
+        t.equal(result.items.length, allItems, 'Amount matches');
 
-test(tld + ': List ID: all, sort: price-desc', function (t) {
-  t.plan(9);
+        var item = result.items[0];
+        compareItem(t, item, testData.byPrice);
+      });
+    });
 
-  var awl = new AmazonWishList(tld);
-  awl.getById(testData.listID, 'all', 'price-desc').then( function(result) {
-    t.equal(result.title, testData.title, 'List title available');
-    t.equal(result.items.length, allItems, 'Amount matches');
+    test(tld + ': List ID: all, sort: price-desc', function (t) {
+      t.plan(9);
 
-    var item = result.items[0];
-    compareItem(t, item, testData.byPriceDesc);
-  });
-});
+      var awl = new AmazonWishList(tld);
+      awl.getById(testData.listID, 'all', 'price-desc').then( function(result) {
+        t.equal(result.title, testData.title, 'List title available');
+        t.equal(result.items.length, allItems, 'Amount matches');
 
-test(tld + ': List ID: all, sort: title', function (t) {
-  t.plan(9);
+        var item = result.items[0];
+        compareItem(t, item, testData.byPriceDesc);
+      });
+    });
 
-  var awl = new AmazonWishList(tld);
-  awl.getById(testData.listID, 'all', 'title').then( function(result) {
-    t.equal(result.title, testData.title, 'List title available');
-    t.equal(result.items.length, allItems, 'Amount matches');
+    test(tld + ': List ID: all, sort: title', function (t) {
+      t.plan(9);
 
-    var item = result.items[0];
-    compareItem(t, item, testData.byTitle);
-  });
-});
+      var awl = new AmazonWishList(tld);
+      awl.getById(testData.listID, 'all', 'title').then( function(result) {
+        t.equal(result.title, testData.title, 'List title available');
+        t.equal(result.items.length, allItems, 'Amount matches');
 
-test(tld + ': List ID: all, sort: priority', function (t) {
-  t.plan(9);
+        var item = result.items[0];
+        compareItem(t, item, testData.byTitle);
+      });
+    });
 
-  var awl = new AmazonWishList(tld);
-  awl.getById(testData.listID, 'all', 'priority').then( function(result) {
-    t.equal(result.title, testData.title, 'List title available');
-    t.equal(result.items.length, allItems, 'Amount matches');
+    test(tld + ': List ID: all, sort: priority', function (t) {
+      t.plan(9);
 
-    var item = result.items[0];
-    compareItem(t, item, testData.byPriority);
-  });
-});
+      var awl = new AmazonWishList(tld);
+      awl.getById(testData.listID, 'all', 'priority').then( function(result) {
+        t.equal(result.title, testData.title, 'List title available');
+        t.equal(result.items.length, allItems, 'Amount matches');
 
-test(tld + ': List ID: invalid ID', function (t) {
-  t.plan(1);
+        var item = result.items[0];
+        compareItem(t, item, testData.byPriority);
+      });
+    });
 
-  var awl = new AmazonWishList(tld);
-  awl.getById('id-fail').then( function(result) {
-  }, function(err) {
-    t.equal(err.statusCode, 404, 'Rejected with 404');
-  });
-});
+    test(tld + ': List ID: invalid ID', function (t) {
+      t.plan(1);
 
-test(tld + ': Customer ID: unpurchased', function (t) {
-  t.plan(2);
-  var lists = testData.lists;
-  var available = [];
+      var awl = new AmazonWishList(tld);
+      awl.getById('id-fail').then( function(result) {
+      }, function(err) {
+        t.equal(err.statusCode, 404, 'Rejected with 404');
+      });
+    });
 
-  var awl = new AmazonWishList(tld);
-  awl.getByCid(testData.cid).then( function(results) {
-    t.ok(results.length > 1, 'Contains multiple lists');
+    test(tld + ': Customer ID: unpurchased', function (t) {
+      t.plan(2);
+      var lists = testData.lists;
+      var available = [];
 
-    for(var i in results) {
-      var current = results[i];
-      if(lists.indexOf(current.title) > -1) {
-        available.push(true);
-      }
-    }
+      var awl = new AmazonWishList(tld);
+      awl.getByCid(testData.cid).then( function(results) {
+        t.ok(results.length > 1, 'Contains multiple lists');
 
-    t.equals(available.length, lists.length, 'List titles match');
-  });
-});
-
-test(tld + ': Customer ID: all', function (t) {
-  t.plan(11);
-  var lists = testData.lists;
-  var available = [];
-  var testingList = {};
-
-  var awl = new AmazonWishList(tld);
-  awl.getByCid(testData.cid, 'all').then( function(results) {
-    t.ok(results.length > 1, 'Contains multiple lists');
-
-    for(var i in results) {
-      var current = results[i];
-      if(lists.indexOf(current.title) > -1) {
-        available.push(true);
-        if(current.title === testData.title) {
-          testingList = current;
+        for(var i in results) {
+          var current = results[i];
+          if(lists.indexOf(current.title) > -1) {
+            available.push(true);
+          }
         }
-      }
-    }
 
-    t.equal(available.length, 3, 'List titles match');
+        t.equals(available.length, lists.length, 'List titles match');
+      });
+    });
 
-    t.equal(testingList.title, testData.title, 'List title available');
-    t.equal(testingList.items.length, allItems, 'Amount matches');
+    test(tld + ': Customer ID: all', function (t) {
+      t.plan(11);
+      var lists = testData.lists;
+      var available = [];
+      var testingList = {};
 
-    var last = testingList.items[testingList.items.length - 1];
-    compareItem(t, last, testData.unpurchased);
-  });
-});
+      var awl = new AmazonWishList(tld);
+      awl.getByCid(testData.cid, 'all').then( function(results) {
+        t.ok(results.length > 1, 'Contains multiple lists');
 
-test(tld + ': Customer ID: unpurchased, sort: priority', function (t) {
-  t.plan(11);
-  var lists = testData.lists;
-  var available = [];
-  var testingList = {};
-
-  var awl = new AmazonWishList(tld);
-  awl.getByCid(testData.cid, 'all', 'priority').then( function(results) {
-    t.ok(results.length > 1, 'Contains multiple lists');
-
-    for(var i in results) {
-      var current = results[i];
-      if(lists.indexOf(current.title) > -1) {
-        available.push(true);
-        if(current.title === testData.title) {
-          testingList = current;
+        for(var i in results) {
+          var current = results[i];
+          if(lists.indexOf(current.title) > -1) {
+            available.push(true);
+            if(current.title === testData.title) {
+              testingList = current;
+            }
+          }
         }
-      }
-    }
 
-    t.equal(available.length, 3, 'List titles match');
+        t.equal(available.length, 3, 'List titles match');
 
-    t.equal(testingList.title, testData.title, 'List title available');
-    t.equal(testingList.items.length, allItems, 'Amount matches');
+        t.equal(testingList.title, testData.title, 'List title available');
+        t.equal(testingList.items.length, allItems, 'Amount matches');
 
-    var item = testingList.items[0];
-    compareItem(t, item, testData.byPriority);
+        var last = testingList.items[testingList.items.length - 1];
+        compareItem(t, last, testData.unpurchased);
+      });
+    });
+
+    test(tld + ': Customer ID: unpurchased, sort: priority', function (t) {
+      t.plan(11);
+      var lists = testData.lists;
+      var available = [];
+      var testingList = {};
+
+      var awl = new AmazonWishList(tld);
+      awl.getByCid(testData.cid, 'all', 'priority').then( function(results) {
+        t.ok(results.length > 1, 'Contains multiple lists');
+
+        for(var i in results) {
+          var current = results[i];
+          if(lists.indexOf(current.title) > -1) {
+            available.push(true);
+            if(current.title === testData.title) {
+              testingList = current;
+            }
+          }
+        }
+
+        t.equal(available.length, 3, 'List titles match');
+
+        t.equal(testingList.title, testData.title, 'List title available');
+        t.equal(testingList.items.length, allItems, 'Amount matches');
+
+        var item = testingList.items[0];
+        compareItem(t, item, testData.byPriority);
+      });
+    });
+
+    test(tld + ': Customer ID: invalid ID', function (t) {
+      t.plan(1);
+
+      var awl = new AmazonWishList(tld);
+      awl.getByCid('id-fail').then( function(result) {
+      }, function(err) {
+        t.equal(err.statusCode, 404, 'Rejected with 404');
+        resolve();
+      });
+    });
   });
-});
+}
 
-test(tld + ': Customer ID: invalid ID', function (t) {
-  t.plan(1);
+var promises = [];
+promises.push(tests('de'));
+promises.push(tests('co.uk'));
 
-  var awl = new AmazonWishList(tld);
-  awl.getByCid('id-fail').then( function(result) {
-  }, function(err) {
-    t.equal(err.statusCode, 404, 'Rejected with 404');
-  });
+Promise.all(promises);
+/*
+tests('de').then(function() {
+  return tests('co.uk');
 });
+*/
