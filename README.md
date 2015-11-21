@@ -36,6 +36,7 @@ Valid *sort* values are:
 
 ## Tested and working amazon TLD's
 * de
+* co.uk
 
 If you use a TLD not mentioned here, please post your findings to the issue section.
 
