@@ -12,7 +12,7 @@ function compareItem(t, item, reference) {
 }
 
 function tests(tld) {
-  return new Promise((resolve, reject) => {
+  return new Promise(function(resolve, reject) {
     var testData = require('./tld/' + tld + '.js');
     var allItems = 0;
 
