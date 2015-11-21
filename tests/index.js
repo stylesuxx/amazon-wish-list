@@ -1,164 +1,130 @@
 var test = require('tape');
 var AmazonWishList = require('../');
 
-var testData = {
-  listID: 'NDDVVVWMJ6AN',
-  cid: 'A3ETU88UAET9K3'
+var allItems = 0;
+var tld = 'de';
+
+var testData = require('./tld/' + tld + '.js');
+
+function compareItem(t, item, reference) {
+  t.equal(item.title, reference.title, 'Item title available');
+  t.equal(item.id, reference.id, 'Item ID available');
+  t.equal(item.priority, reference.priority, 'Item priority available');
+  t.equal(item.comment, reference.comment, 'Item comment available');
+  t.equal(item.currency, reference.currency, 'Item currency available');
+  t.ok(!isNaN(item.price), 'Item price available');
+  t.equal(item.link, reference.link, 'Item link available');
 }
 
-var allItems = 0;
-
-test('List ID: unpurchased', function (t) {
+test(tld + ': List ID: unpurchased', function(t) {
   t.plan(9);
 
-  var awl = new AmazonWishList('de');
-  awl.getById(testData.listID).then( function(result) {
-    t.equal(result.title, 'testing', 'List title available');
-    t.ok(result.items.length >= 26, 'Pagination is working');
+  var awl = new AmazonWishList(tld);
+  awl.getById(testData.listID).then(function(result) {
+    t.equal(result.title, testData.title, 'List title available');
+    t.ok(result.items.length >= testData.itemCount, 'Pagination is working');
     allItems += result.items.length;
 
     var last = result.items[result.items.length - 1];
-    t.equal(last.title, 'Die Simpsons - Die komplette Season 1 (Collector\'s Edition, 3 DVDs)', 'Item title available');
-    t.equal(last.id, 'B00005MFO7', 'Item ID available');
-    t.equal(last.priority, 2, 'Item priority available');
-    t.equal(last.comment, 'Just a test comment.', 'Item comment available');
-    t.equal(last.currency, 'EUR', 'Item currency available');
-    t.equal(last.price, 13.99, 'Item price available');
-    t.equal(last.link, 'https://amazon.de/dp/B00005MFO7', 'Item link available');
+    compareItem(t, last, testData.unpurchased);
   });
 });
 
-test('List ID: unpurchased', function (t) {
+test(tld + ': List ID: purchased', function (t) {
   t.plan(9);
 
-  var awl = new AmazonWishList('de');
+  var awl = new AmazonWishList(tld);
   awl.getById(testData.listID, 'purchased').then( function(result) {
-    t.equal(result.title, 'testing', 'List title available');
+    t.equal(result.title, testData.title, 'List title available');
     t.equal(result.items.length, 1, 'Amount matches');
     allItems += result.items.length;
 
     var last = result.items[result.items.length - 1];
-    t.equal(last.title, 'United Labels 0804201 - Simpsons Sprechender Flaschenöffner', 'Item title available');
-    t.equal(last.id, 'B0015GCBJG', 'Item ID available');
-    t.equal(last.priority, 0, 'Item priority available');
-    t.equal(last.comment, '', 'Item comment is empty');
-    t.equal(last.currency, 'EUR', 'Item currency available');
-    t.equal(last.price, 8.99, 'Item price available');
-    t.equal(last.link, 'https://amazon.de/dp/B0015GCBJG', 'Item link available');
+    compareItem(t, last, testData.purchased);
   });
 });
 
-test('List ID: all', function (t) {
+test(tld + ': List ID: all', function (t) {
   t.plan(9);
 
-  var awl = new AmazonWishList('de');
+  var awl = new AmazonWishList(tld);
   awl.getById(testData.listID, 'all').then( function(result) {
-    t.equal(result.title, 'testing', 'List title available');
+    t.equal(result.title, testData.title, 'List title available');
     t.equal(result.items.length, allItems, 'Amount matches');
 
     var last = result.items[result.items.length - 1];
-    t.equal(last.title, 'Die Simpsons - Die komplette Season 1 (Collector\'s Edition, 3 DVDs)', 'Item title available');
-    t.equal(last.id, 'B00005MFO7', 'Item ID available');
-    t.equal(last.priority, 2, 'Item priority available');
-    t.equal(last.comment, 'Just a test comment.', 'Item comment available');
-    t.equal(last.currency, 'EUR', 'Item currency available');
-    t.equal(last.price, 13.99, 'Item price available');
-    t.equal(last.link, 'https://amazon.de/dp/B00005MFO7', 'Item link available');
+    compareItem(t, last, testData.unpurchased);
   });
 });
 
-test('List ID: all, sort: price', function (t) {
+test(tld + ': List ID: all, sort: price', function (t) {
   t.plan(9);
 
-  var awl = new AmazonWishList('de');
+  var awl = new AmazonWishList(tld);
   awl.getById(testData.listID, 'all', 'price').then( function(result) {
-    t.equal(result.title, 'testing', 'List title available');
+    t.equal(result.title, testData.title, 'List title available');
     t.equal(result.items.length, allItems, 'Amount matches');
 
     var item = result.items[0];
-    t.equal(item.title, 'Die Simpsons - Schrille Nacht mit den Simpsons', 'Item title available');
-    t.equal(item.id, 'B0002W3H3S', 'Item ID available');
-    t.equal(item.priority, 0, 'Item priority available');
-    t.equal(item.comment, '', 'Item comment available');
-    t.equal(item.currency, 'EUR', 'Item currency available');
-    t.equal(item.price, 6.97, 'Item price available');
-    t.equal(item.link, 'https://amazon.de/dp/B0002W3H3S', 'Item link available');
+    compareItem(t, item, testData.byPrice);
   });
 });
 
-test('List ID: all, sort: price-desc', function (t) {
+test(tld + ': List ID: all, sort: price-desc', function (t) {
   t.plan(9);
 
-  var awl = new AmazonWishList('de');
+  var awl = new AmazonWishList(tld);
   awl.getById(testData.listID, 'all', 'price-desc').then( function(result) {
-    t.equal(result.title, 'testing', 'List title available');
+    t.equal(result.title, testData.title, 'List title available');
     t.equal(result.items.length, allItems, 'Amount matches');
 
     var item = result.items[0];
-    t.equal(item.title, 'Simpsons Monsterbox (Season 1-9)', 'Item title available');
-    t.equal(item.id, 'B000UDR1W2', 'Item ID available');
-    t.equal(item.priority, 0, 'Item priority available');
-    t.equal(item.comment, '', 'Item comment available');
-    t.equal(item.currency, 'EUR', 'Item currency available');
-    t.equal(item.price, 129.00, 'Item price available');
-    t.equal(item.link, 'https://amazon.de/dp/B000UDR1W2', 'Item link available');
+    compareItem(t, item, testData.byPriceDesc);
   });
 });
 
-test('List ID: all, sort: title', function (t) {
+test(tld + ': List ID: all, sort: title', function (t) {
   t.plan(9);
 
-  var awl = new AmazonWishList('de');
+  var awl = new AmazonWishList(tld);
   awl.getById(testData.listID, 'all', 'title').then( function(result) {
-    t.equal(result.title, 'testing', 'List title available');
+    t.equal(result.title, testData.title, 'List title available');
     t.equal(result.items.length, allItems, 'Amount matches');
 
     var item = result.items[0];
-    t.equal(item.title, 'Die Simpsons  - Die komplette Season 9 (Collector\'s Edition, 4 DVDs)', 'Item title available');
-    t.equal(item.id, 'B000MM0HT0', 'Item ID available');
-    t.equal(item.priority, 0, 'Item priority available');
-    t.equal(item.comment, '', 'Item comment available');
-    t.equal(item.currency, 'EUR', 'Item currency available');
-    t.equal(item.price, 13.99, 'Item price available');
-    t.equal(item.link, 'https://amazon.de/dp/B000MM0HT0', 'Item link available');
+    compareItem(t, item, testData.byTitle);
   });
 });
 
-test('List ID: all, sort: priority', function (t) {
+test(tld + ': List ID: all, sort: priority', function (t) {
   t.plan(9);
 
-  var awl = new AmazonWishList('de');
+  var awl = new AmazonWishList(tld);
   awl.getById(testData.listID, 'all', 'priority').then( function(result) {
-    t.equal(result.title, 'testing', 'List title available');
+    t.equal(result.title, testData.title, 'List title available');
     t.equal(result.items.length, allItems, 'Amount matches');
 
     var item = result.items[0];
-    t.equal(item.title, 'Die Simpsons - Die komplette Season 1 (Collector\'s Edition, 3 DVDs)', 'Item title available');
-    t.equal(item.id, 'B00005MFO7', 'Item ID available');
-    t.equal(item.priority, 2, 'Item priority available');
-    t.equal(item.comment, 'Just a test comment.', 'Item comment available');
-    t.equal(item.currency, 'EUR', 'Item currency available');
-    t.equal(item.price, 13.99, 'Item price available');
-    t.equal(item.link, 'https://amazon.de/dp/B00005MFO7', 'Item link available');
+    compareItem(t, item, testData.byPriority);
   });
 });
 
-test('List ID: invalid ID', function (t) {
+test(tld + ': List ID: invalid ID', function (t) {
   t.plan(1);
 
-  var awl = new AmazonWishList('de');
+  var awl = new AmazonWishList(tld);
   awl.getById('id-fail').then( function(result) {
   }, function(err) {
     t.equal(err.statusCode, 404, 'Rejected with 404');
   });
 });
 
-test('Customer ID: unpurchased', function (t) {
+test(tld + ': Customer ID: unpurchased', function (t) {
   t.plan(2);
-  var lists = ['testing', 'Books', 'Boardgames'];
+  var lists = testData.lists;
   var available = [];
 
-  var awl = new AmazonWishList('de');
+  var awl = new AmazonWishList(tld);
   awl.getByCid(testData.cid).then( function(results) {
     t.ok(results.length > 1, 'Contains multiple lists');
 
@@ -173,13 +139,13 @@ test('Customer ID: unpurchased', function (t) {
   });
 });
 
-test('Customer ID: all', function (t) {
+test(tld + ': Customer ID: all', function (t) {
   t.plan(11);
-  var lists = ['testing', 'Books', 'Boardgames'];
+  var lists = testData.lists;
   var available = [];
   var testingList = {};
 
-  var awl = new AmazonWishList('de');
+  var awl = new AmazonWishList(tld);
   awl.getByCid(testData.cid, 'all').then( function(results) {
     t.ok(results.length > 1, 'Contains multiple lists');
 
@@ -187,7 +153,7 @@ test('Customer ID: all', function (t) {
       var current = results[i];
       if(lists.indexOf(current.title) > -1) {
         available.push(true);
-        if(current.title === 'testing') {
+        if(current.title === testData.title) {
           testingList = current;
         }
       }
@@ -195,27 +161,21 @@ test('Customer ID: all', function (t) {
 
     t.equal(available.length, 3, 'List titles match');
 
-    t.equal(testingList.title, 'testing', 'List title available');
+    t.equal(testingList.title, testData.title, 'List title available');
     t.equal(testingList.items.length, allItems, 'Amount matches');
 
     var last = testingList.items[testingList.items.length - 1];
-    t.equal(last.title, 'Die Simpsons - Die komplette Season 1 (Collector\'s Edition, 3 DVDs)', 'Item title available');
-    t.equal(last.id, 'B00005MFO7', 'Item ID available');
-    t.equal(last.priority, 2, 'Item priority available');
-    t.equal(last.comment, 'Just a test comment.', 'Item comment available');
-    t.equal(last.currency, 'EUR', 'Item currency available');
-    t.equal(last.price, 13.99, 'Item price available');
-    t.equal(last.link, 'https://amazon.de/dp/B00005MFO7', 'Item link available');
+    compareItem(t, last, testData.unpurchased);
   });
 });
 
-test('Customer ID: unpurchased, sort: priority', function (t) {
+test(tld + ': Customer ID: unpurchased, sort: priority', function (t) {
   t.plan(11);
-  var lists = ['testing', 'Books', 'Boardgames'];
+  var lists = testData.lists;
   var available = [];
   var testingList = {};
 
-  var awl = new AmazonWishList('de');
+  var awl = new AmazonWishList(tld);
   awl.getByCid(testData.cid, 'all', 'priority').then( function(results) {
     t.ok(results.length > 1, 'Contains multiple lists');
 
@@ -223,7 +183,7 @@ test('Customer ID: unpurchased, sort: priority', function (t) {
       var current = results[i];
       if(lists.indexOf(current.title) > -1) {
         available.push(true);
-        if(current.title === 'testing') {
+        if(current.title === testData.title) {
           testingList = current;
         }
       }
@@ -231,24 +191,18 @@ test('Customer ID: unpurchased, sort: priority', function (t) {
 
     t.equal(available.length, 3, 'List titles match');
 
-    t.equal(testingList.title, 'testing', 'List title available');
+    t.equal(testingList.title, testData.title, 'List title available');
     t.equal(testingList.items.length, allItems, 'Amount matches');
 
     var item = testingList.items[0];
-    t.equal(item.title, 'Die Simpsons - Die komplette Season 1 (Collector\'s Edition, 3 DVDs)', 'Item title available');
-    t.equal(item.id, 'B00005MFO7', 'Item ID available');
-    t.equal(item.priority, 2, 'Item priority available');
-    t.equal(item.comment, 'Just a test comment.', 'Item comment available');
-    t.equal(item.currency, 'EUR', 'Item currency available');
-    t.equal(item.price, 13.99, 'Item price available');
-    t.equal(item.link, 'https://amazon.de/dp/B00005MFO7', 'Item link available');
+    compareItem(t, item, testData.byPriority);
   });
 });
 
-test('Customer ID: invalid ID', function (t) {
+test(tld + ': Customer ID: invalid ID', function (t) {
   t.plan(1);
 
-  var awl = new AmazonWishList('de');
+  var awl = new AmazonWishList(tld);
   awl.getByCid('id-fail').then( function(result) {
   }, function(err) {
     t.equal(err.statusCode, 404, 'Rejected with 404');
