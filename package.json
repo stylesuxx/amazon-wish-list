@@ -1,6 +1,6 @@
 {
   "name": "amazon-wish-list",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Get Amazon wish lists by their ID, or by customer ID.",
   "main": "lib/index.js",
   "scripts": {
