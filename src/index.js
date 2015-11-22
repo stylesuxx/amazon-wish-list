@@ -145,6 +145,7 @@ class AmazonWishList {
       var promises = [];
       var list = {
         title: $(selectors.title).text().trim(),
+        id: id,
         items: []
       };
 
