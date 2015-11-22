@@ -17,11 +17,12 @@ function tests(tld) {
     var allItems = 0;
 
     test(tld + ': List ID: unpurchased', function(t) {
-      t.plan(9);
+      t.plan(10);
 
       var awl = new AmazonWishList(tld);
       awl.getById(testData.listID).then(function(result) {
         t.equal(result.title, testData.title, 'List title available');
+        t.equal(result.id, testData.listID, 'List id available');
         t.ok(result.items.length >= testData.itemCount, 'Pagination is working');
         allItems += result.items.length;
 
@@ -31,11 +32,12 @@ function tests(tld) {
     });
 
     test(tld + ': List ID: purchased', function (t) {
-      t.plan(9);
+      t.plan(10);
 
       var awl = new AmazonWishList(tld);
       awl.getById(testData.listID, 'purchased').then( function(result) {
         t.equal(result.title, testData.title, 'List title available');
+        t.equal(result.id, testData.listID, 'List id available');
         t.equal(result.items.length, 1, 'Amount matches');
         allItems += result.items.length;
 
@@ -45,11 +47,12 @@ function tests(tld) {
     });
 
     test(tld + ': List ID: all', function (t) {
-      t.plan(9);
+      t.plan(10);
 
       var awl = new AmazonWishList(tld);
       awl.getById(testData.listID, 'all').then( function(result) {
         t.equal(result.title, testData.title, 'List title available');
+        t.equal(result.id, testData.listID, 'List id available');
         t.equal(result.items.length, allItems, 'Amount matches');
 
         var last = result.items[result.items.length - 1];
@@ -58,11 +61,12 @@ function tests(tld) {
     });
 
     test(tld + ': List ID: all, sort: price', function (t) {
-      t.plan(9);
+      t.plan(10);
 
       var awl = new AmazonWishList(tld);
       awl.getById(testData.listID, 'all', 'price').then( function(result) {
         t.equal(result.title, testData.title, 'List title available');
+        t.equal(result.id, testData.listID, 'List id available');
         t.equal(result.items.length, allItems, 'Amount matches');
 
         var item = result.items[0];
@@ -71,11 +75,12 @@ function tests(tld) {
     });
 
     test(tld + ': List ID: all, sort: price-desc', function (t) {
-      t.plan(9);
+      t.plan(10);
 
       var awl = new AmazonWishList(tld);
       awl.getById(testData.listID, 'all', 'price-desc').then( function(result) {
         t.equal(result.title, testData.title, 'List title available');
+        t.equal(result.id, testData.listID, 'List id available');
         t.equal(result.items.length, allItems, 'Amount matches');
 
         var item = result.items[0];
@@ -84,11 +89,12 @@ function tests(tld) {
     });
 
     test(tld + ': List ID: all, sort: title', function (t) {
-      t.plan(9);
+      t.plan(10);
 
       var awl = new AmazonWishList(tld);
       awl.getById(testData.listID, 'all', 'title').then( function(result) {
         t.equal(result.title, testData.title, 'List title available');
+        t.equal(result.id, testData.listID, 'List id available');
         t.equal(result.items.length, allItems, 'Amount matches');
 
         var item = result.items[0];
@@ -97,11 +103,12 @@ function tests(tld) {
     });
 
     test(tld + ': List ID: all, sort: priority', function (t) {
-      t.plan(9);
+      t.plan(10);
 
       var awl = new AmazonWishList(tld);
       awl.getById(testData.listID, 'all', 'priority').then( function(result) {
         t.equal(result.title, testData.title, 'List title available');
+        t.equal(result.id, testData.listID, 'List id available');
         t.equal(result.items.length, allItems, 'Amount matches');
 
         var item = result.items[0];
@@ -140,7 +147,7 @@ function tests(tld) {
     });
 
     test(tld + ': Customer ID: all', function (t) {
-      t.plan(11);
+      t.plan(12);
       var lists = testData.lists;
       var available = [];
       var testingList = {};
@@ -162,6 +169,7 @@ function tests(tld) {
         t.equal(available.length, 3, 'List titles match');
 
         t.equal(testingList.title, testData.title, 'List title available');
+        t.equal(testingList.id, testData.listID, 'List id available');
         t.equal(testingList.items.length, allItems, 'Amount matches');
 
         var last = testingList.items[testingList.items.length - 1];
@@ -170,7 +178,7 @@ function tests(tld) {
     });
 
     test(tld + ': Customer ID: unpurchased, sort: priority', function (t) {
-      t.plan(11);
+      t.plan(12);
       var lists = testData.lists;
       var available = [];
       var testingList = {};
@@ -192,6 +200,7 @@ function tests(tld) {
         t.equal(available.length, 3, 'List titles match');
 
         t.equal(testingList.title, testData.title, 'List title available');
+        t.equal(testingList.id, testData.listID, 'List id available');
         t.equal(testingList.items.length, allItems, 'Amount matches');
 
         var item = testingList.items[0];
