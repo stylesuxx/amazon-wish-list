@@ -1,5 +1,5 @@
 # Amazon Wish List
-[![npm version](https://badge.fury.io/js/amazon-wish-list.svg)] [![Build pass](https://travis-ci.org/stylesuxx/amazon-wish-list.svg?branch=master)](https://travis-ci.org/stylesuxx/amazon-wish-list?branch=master)  [![Dependencies](https://david-dm.org/stylesuxx/amazon-wish-list.svg)](https://david-dm.org/stylesuxx/amazon-wish-list)
+[![npm version](https://badge.fury.io/js/amazon-wish-list.svg)](https://badge.fury.io/js/amazon-wish-list) [![Build pass](https://travis-ci.org/stylesuxx/amazon-wish-list.svg?branch=master)](https://travis-ci.org/stylesuxx/amazon-wish-list?branch=master)  [![Dependencies](https://david-dm.org/stylesuxx/amazon-wish-list.svg)](https://david-dm.org/stylesuxx/amazon-wish-list)
 
 > A JavaScript scraper for amazon wish lists that returns promises.
 
