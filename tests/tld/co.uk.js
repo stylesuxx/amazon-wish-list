@@ -29,12 +29,12 @@ module.exports = {
     link: 'https://amazon.co.uk/dp/B000092WDA'
   },
   byPriceDesc: {
-    title: 'Simpsons: Season 20 [DVD] [IMPORT] [LIMITED EDITION]',
-    id: 'B004TGV6EA',
+    title: 'The Simpsons - Season 7 (Ltd Edition \'Marge\' head) [DVD]',
+    id: 'B000BX4JZI',
     priority: 0,
     comment: '',
     currency: '£',
-    link: 'https://amazon.co.uk/dp/B004TGV6EA'
+    link: 'https://amazon.co.uk/dp/B000BX4JZI'
   },
   byTitle: {
     title: 'Futurama - Season 2 [DVD]',

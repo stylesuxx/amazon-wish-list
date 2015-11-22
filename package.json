@@ -1,7 +1,7 @@
 {
   "name": "amazon-wish-list",
-  "version": "0.2.0",
-  "description": "Get Amazon wish lists by their ID, or by customer ID.",
+  "version": "0.3.0",
+  "description": "A JavaScript scraper to look up public amazon wish lists by customer or wish list id.",
   "main": "lib/index.js",
   "scripts": {
     "clean": "rm -rf lib",

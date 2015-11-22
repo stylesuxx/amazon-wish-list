@@ -3,39 +3,76 @@ import cheerio from 'cheerio';
 
 class AmazonWishList {
   constructor(tld = 'de') {
-    this.baseUrl = 'https://amazon.' + tld;
+    this.baseUrl = ['https://amazon.', tld].join('');
+    this.config = {
+      profile: {
+        url: [this.baseUrl, 'gp/profile/'].join('/')
+      },
+      lists: {
+        url: [this.baseUrl, 'gp/registry/wishlist/?cid='].join('/'),
+        selectors: {
+          listLinks: '.wishlist-left-nav .g-left-nav-row a'
+        }
+      },
+      list: {
+        url: [this.baseUrl, 'gp/registry/wishlist/'].join('/'),
+        selectors: {
+          title: '#wl-list-info h1',
+          pageLinks: '.a-pagination li:not(.a-selected, .a-last) a',
+          items: '#item-page-wrapper .g-items-section>div.a-fixed-left-grid',
+          itemTitle: 'h5',
+          itemId: 'h5 a',
+          itemPriority: '.g-item-comment-row span span.a-hidden',
+          itemComment: '.g-item-comment-row .g-comment-quote.a-text-quote',
+          itemPriceText: '.price-section .a-color-price'
+        }
+      }
+    };
+
+    this.getProfileUrl = function(cid) {
+      return [this.config.profile.url, cid].join('');
+    };
+
+    this.getListsUrl = function(cid) {
+      return [this.config.lists.url, cid].join('');
+    };
+
+    this.getListUrl = function(id) {
+      return [this.config.list.url, id].join('');
+    };
+
+    this.getItemUrl = function(id) {
+      return [this.baseUrl, 'dp', id].join('/');
+    };
 
     this.getPage = function(url) {
       var options = {
-        uri: this.baseUrl + url,
-        transform: function (body) {
-          return cheerio.load(body);
-        }
+        uri: [this.baseUrl, url].join(''),
+        transform: (body) => cheerio.load(body)
       };
 
-      return rp(options).then(($) => {
-        return this.getItems($);
-      });
+      return rp(options).then(($) => this.getItems($));
     }
 
     this.getItems = function($) {
       return new Promise((resolve, reject) => {
-        var $items = $('#item-page-wrapper .g-items-section>div.a-fixed-left-grid');
+        const selectors = this.config.list.selectors;
+        const $items = $(selectors.items);
         var items = [];
 
         $items.each((index, element) => {
-          var title = $('h5', element).text().trim();
-          var id = $('h5 a', element).attr('href').split('/')[2];
-          var link = this.baseUrl + '/dp/' + id;
-          var priority = parseInt($('.g-item-comment-row span span.a-hidden', element).text().trim()) | 0;
-          var comment = $('.g-item-comment-row .g-comment-quote.a-text-quote', element).text().trim();
-          var priceText = $('.price-section .a-color-price', element).text();
-          var currency = 'N/A';
-          var price = 'N/A';
+          const title = $(selectors.itemTitle, element).text().trim();
+          const id = $(selectors.itemId, element).attr('href').split('/')[2];
+          const link = this.getItemUrl(id);
+          const priority = parseInt($(selectors.itemPriority, element).text().trim()) | 0;
+          const comment = $(selectors.itemComment, element).text().trim();
+          let priceText = $(selectors.itemPriceText, element).text().trim();
+          let currency = 'N/A';
+          let price = 'N/A';
           if(priceText) {
             priceText = priceText.replace(',', '.').trim();
-            var re = /(\D*)(.*)/;
-            var result = re.exec(priceText);
+            const re = /(\D*)(.*)/;
+            const result = re.exec(priceText);
 
             if(result.length < 3) {
               reject('Could not parse item price.')
@@ -62,18 +99,12 @@ class AmazonWishList {
   }
 
   getByCid(cid, filter = 'unpurchased', sort = 'date') {
-    var url = '/gp/profile/' + cid;
-    var options = {
-      uri: this.baseUrl + url
-    };
+    const options = { uri: this.getProfileUrl(cid) };
 
     return rp(options).then(() => {
-      var url = '/gp/registry/wishlist/?cid=' + cid;
-      var options = {
-        uri: this.baseUrl + url,
-        transform: function (body) {
-          return cheerio.load(body);
-        }
+      const options = {
+        uri: this.getListsUrl(cid),
+        transform: (body) => cheerio.load(body)
       };
 
       return rp(options);
@@ -81,45 +112,39 @@ class AmazonWishList {
       var promises = [];
       var lists = [];
 
-      var $lists = $('.wishlist-left-nav .g-left-nav-row a');
+      const $lists = $(this.config.lists.selectors.listLinks);
       $lists.each((index, item) => {
-        var url = $(item).attr('href');
-        var id = url.split('/')[4];
+        const url = $(item).attr('href');
+        const id = url.split('/')[4];
 
         promises.push(this.getById(id, filter, sort));
       });
 
       return Promise.all(promises).then(function(responses) {
-        for(var i in responses) {
-          var current = responses[i];
-
-          lists.push(current);
+        for(let response of responses) {
+          lists.push(response);
         }
 
-        return new Promise(function(resolve, reject) {
-          resolve(lists);
-        });
+        return new Promise((resolve, reject) => resolve(lists));
       });
     });
   }
 
   getById(id, filter = 'unpurchased', sort = 'date') {
-    var url = '/gp/registry/wishlist/' + id;
-    var options = {
-      uri: this.baseUrl + url,
+    const selectors = this.config.list.selectors;
+    const options = {
+      uri: this.getListUrl(id),
       qs: {
         reveal: filter,
-        sort: (sort != 'priority') ? 'universal-' + sort : sort
+        sort: (sort !== 'priority') ? 'universal-' + sort : sort
       },
-      transform: function (body) {
-        return cheerio.load(body);
-      }
+      transform: (body) => cheerio.load(body)
     };
 
     return rp(options).then(($) => {
       var promises = [];
       var list = {
-        title: $('#wl-list-info h1').text().trim(),
+        title: $(selectors.title).text().trim(),
         items: []
       };
 
@@ -127,23 +152,19 @@ class AmazonWishList {
       promises.push(this.getItems($));
 
       /* Following pages */
-      var $pages = $('.a-pagination li:not(.a-selected, .a-last) a');
+      const $pages = $(selectors.pageLinks);
       $pages.each((index, element) => {
-        var url = $(element).attr('href');
+        const url = $(element).attr('href');
 
         promises.push(this.getPage(url));
       });
 
       return Promise.all(promises).then(function(responses) {
-        for(var i in responses) {
-          var current = responses[i];
-
-          list.items = list.items.concat(current);
+        for(let response of responses) {
+          list.items = list.items.concat(response);
         }
 
-        return new Promise(function(resolve, reject) {
-          resolve(list);
-        });
+        return new Promise((resolve, reject) => resolve(list));
       });
     });
   }
