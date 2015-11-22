@@ -215,10 +215,6 @@ function tests(tld) {
 var promises = [];
 promises.push(tests('de'));
 promises.push(tests('co.uk'));
+promises.push(tests('com'));
 
 Promise.all(promises);
-/*
-tests('de').then(function() {
-  return tests('co.uk');
-});
-*/
