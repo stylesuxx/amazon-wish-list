@@ -42,7 +42,7 @@ class AmazonWishList {
     };
 
     this.getItemUrl = function(id) {
-      return this.baseUrl + href
+      return this.baseUrl + href;
     };
 
     this.getPage = function(url) {
