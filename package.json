@@ -14,9 +14,8 @@
   "author": "Chris Landa <stylesuxx@gmail.com>",
   "license": "ISC",
   "devDependencies": {
-    "babel": "^5.8.23",
-    "babel-eslint": "^4.1.4",
-    "eslint": "^1.9.0",
+    "babel-cli": "^6.14.0",
+    "eslint": "^3.5.0",
     "tape": "^4.2.2"
   },
   "dependencies": {
@@ -34,5 +33,8 @@
     "wish list",
     "wishlist",
     "api"
-  ]
+  ],
+  "engine": {
+    "nodejs": ">=4.5.0"
+  }
 }
