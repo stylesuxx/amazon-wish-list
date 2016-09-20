@@ -9,7 +9,7 @@ module.exports = {
     id: 'B007KFZ85K',
     priority: 2,
     comment: 'Just a test comment.',
-    currency: '$',
+    currency: 'N/A',
     link: 'https://amazon.com/dp/B007KFZ85K'
   },
   purchased: {
@@ -21,20 +21,20 @@ module.exports = {
     link: 'https://amazon.com/dp/B008HFUIDO'
   },
   byPrice: {
-    title: 'Vandor 67066 The Simpsons "D\'Oh" 12 oz Ceramic Mug, Multicolor',
-    id: 'B008HFUIDO',
+    title: 'Futurama: Volume Six',
+    id: 'B005QIOJUI',
     priority: 0,
     comment: '',
     currency: '$',
-    link: 'https://amazon.com/dp/B008HFUIDO'
+    link: 'https://amazon.com/dp/B005QIOJUI'
   },
   byPriceDesc: {
-    title: 'The Simpsons: Season 7',
-    id: 'B007KFZ7Q0',
+    title: 'Futurama: Volume Five',
+    id: 'B004696M94',
     priority: 0,
     comment: '',
-    currency: '$',
-    link: 'https://amazon.com/dp/B007KFZ7Q0'
+    currency: 'N/A',
+    link: 'https://amazon.com/dp/B004696M94'
   },
   byTitle: {
     title: 'Futurama, Vol. 8',
@@ -49,7 +49,7 @@ module.exports = {
     id: 'B007KFZ85K',
     priority: 2,
     comment: 'Just a test comment.',
-    currency: '$',
+    currency: 'N/A',
     link: 'https://amazon.com/dp/B007KFZ85K'
   }
 };

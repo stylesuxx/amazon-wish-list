@@ -21,12 +21,12 @@ module.exports = {
     link: 'https://amazon.de/dp/B0015GCBJG'
   },
   byPrice: {
-    title: 'Die Simpsons - Schrille Nacht mit den Simpsons',
-    id: 'B0002W3H3S',
+    title: 'Die Simpsons - Der Film',
+    id: 'B000UYRI2O',
     priority: 0,
     comment: '',
     currency: 'EUR',
-    link: 'https://amazon.de/dp/B0002W3H3S'
+    link: 'https://amazon.de/dp/B000UYRI2O'
   },
   byPriceDesc: {
     title: 'Simpsons Monsterbox (Season 1-9)',
