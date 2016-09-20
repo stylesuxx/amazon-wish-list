@@ -36,7 +36,7 @@
     "wishlist",
     "api"
   ],
-  "engine": {
-    "nodejs": ">=4.5.0"
+  "engines": {
+    "node": ">=4.5.0"
   }
 }
