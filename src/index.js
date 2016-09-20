@@ -70,6 +70,7 @@ class AmazonWishList {
           let currency = 'N/A';
           let price = 'N/A';
           if(priceText) {
+            priceText = priceText.replace('.', '').trim();
             priceText = priceText.replace(',', '.').trim();
             const re = /(\D*)(.*)/;
             const result = re.exec(priceText);
