@@ -1,5 +1,6 @@
-var test = require('tape');
-var AmazonWishList = require('../');
+//var test = require('tape');
+import test from 'tape';
+import AmazonWishList from '../lib/';
 
 function compareItem(t, item, reference) {
   t.equal(item.title, reference.title, 'Item title available');
@@ -7,7 +8,7 @@ function compareItem(t, item, reference) {
   t.equal(item.priority, reference.priority, 'Item priority available');
   t.equal(item.comment, reference.comment, 'Item comment available');
   t.equal(item.currency, reference.currency, 'Item currency available');
-  t.ok(!isNaN(item.price), 'Item price available');
+  t.ok((!isNaN(item.price) || item.currency === 'N/A'), 'Item price available');
   t.equal(item.link, reference.link, 'Item link available');
 }
 
