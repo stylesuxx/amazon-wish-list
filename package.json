@@ -12,7 +12,7 @@
     "preversion": "npm test"
   },
   "author": "Chris Landa <stylesuxx@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "request-promise": "^4.1.1",
     "cheerio": "^0.22.0"
