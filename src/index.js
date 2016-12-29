@@ -41,8 +41,8 @@ class AmazonWishList {
       return [this.config.list.url, id].join('');
     };
 
-    this.getItemUrl = function(id) {
-      return [this.baseUrl, 'dp', id].join('/');
+    this.getItemUrl = function(href) {
+      return this.baseUrl + href;
     };
 
     this.getPage = function(url) {
@@ -63,7 +63,7 @@ class AmazonWishList {
         $items.each((index, element) => {
           const title = $(selectors.itemTitle, element).text().trim();
           const id = $(selectors.itemId, element).attr('href').split('/')[2];
-          const link = this.getItemUrl(id);
+          const link = this.getItemUrl($(selectors.itemId, element).attr('href'));
           const priority = parseInt($(selectors.itemPriority, element).text().trim()) | 0;
           const comment = $(selectors.itemComment, element).text().trim();
           let priceText = $(selectors.itemPriceText, element).text().trim();
