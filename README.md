@@ -8,19 +8,19 @@
 
 ## Usage
 To use with the default tld (`.de`):
-```
+```javascript
 var AmazonWishList = require('amazon-wish-list');
 var awl = new AmazonWishList.default();
 ```
 
 To use with another domain:
-```
+```javascript
 var AmazonWishList = require('amazon-wish-list');
 var awl = new AmazonWishList.default(YOUR_TLD);
 ```
 
 To see your list in the console (test ID is valid for `.de` only!):
-```
+```javascript
 awl.getById('NDDVVVWMJ6AN').then(function(list) {
   console.log(list);
 });
