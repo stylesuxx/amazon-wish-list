@@ -52,7 +52,7 @@ class AmazonWishList {
       };
 
       return rp(options).then(($) => this.getItems($));
-    }
+    };
 
     this.getItems = function($) {
       return new Promise((resolve, reject) => {
@@ -80,7 +80,11 @@ class AmazonWishList {
             }
 
             currency = result[1].trim();
-            price = parseFloat(parseFloat(result[2]).toFixed(2));
+
+            const centsIdx = result[2].lastIndexOf('.');
+            const wholes = result[2].substring(0, centsIdx).replace(/\./g, '');
+            const cents = result[2].substring(centsIdx);
+            price = wholes + cents;
           }
 
           items.push({
@@ -96,7 +100,7 @@ class AmazonWishList {
 
         resolve(items);
       });
-    }
+    };
   }
 
   getByCid(cid, filter = 'unpurchased', sort = 'date') {
